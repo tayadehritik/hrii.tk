@@ -1,0 +1,93 @@
+<html>
+	<head>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<link href='https://fonts.googleapis.com/css?family=Bungee' rel='stylesheet'>
+		<link href='https://fonts.googleapis.com/css?family=Flamenco' rel='stylesheet'>
+		<link href='https://fonts.googleapis.com/css?family=Black Ops One' rel='stylesheet'>
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>	
+	<script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/4.9.0/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/4.9.0/firebase-database.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/4.9.0/firebase-firestore.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/4.9.0/firebase-messaging.js"></script>
+
+	<script>
+  	// Initialize Firebase
+  	var config = {
+    	apiKey: "AIzaSyDsRoO6o1oAEdLtobMiMoO8apc4SqQig2k",
+   	authDomain: "fir-example-ef56e.firebaseapp.com",
+    	databaseURL: "https://fir-example-ef56e.firebaseio.com",
+    	projectId: "fir-example-ef56e",
+    	storageBucket: "fir-example-ef56e.appspot.com",
+    	messagingSenderId: "529395661675"
+  	};
+  	firebase.initializeApp(config);
+	</script>
+	<style>
+		.msg{
+		margin:10px 0;
+		padding:10px;
+		width:400px;
+		background-color:#ffc82a;
+		overflow:auto;
+			
+	}
+				
+	</style>
+	<script>
+	
+		$(document).ready(function(){
+		
+			$("#but").hide();
+			$("#mssg").hide();
+			$("#results").hide();	
+			var username = null;
+			var database = firebase.database().ref('message');
+			var provider = new firebase.auth.GoogleAuthProvider();
+			$("#log").click(function(){
+			        	
+			});					
+			$("#but").click(function(){
+				
+				var message = $("#mssg").val();
+				alert(message);
+				database.push({name:username,text:message});
+			});
+			database.on("child_added", function(snapshot, prevChildKey){
+				
+				var newPost = snapshot.val();
+			
+				var userEle = document.createElement("b");
+				var msgEle = document.createElement("p");
+				userEle.textContent = newPost.name;
+				msgEle.textContent = newPost.text;
+				var br = document.createElement("br");
+				var Post = document.createElement("div");
+				Post.appendChild(userEle);
+				Post.appendChild(br);
+				Post.appendChild(br);
+				Post.appendChild(msgEle);
+				Post.className = "msg";
+				document.getElementById("results").appendChild(Post);
+
+			});
+		});
+	
+	</script>
+
+	</head>
+	<body>
+		<textarea  class="form-control" id = "mssg" rows="5" maxlength="150" style="width:600px;" placeholder="Message"></textarea>
+		<h3 id ="wel">Welcome</h3>
+		<button class ="btn btn-danger" id = "log">Log in</button>
+		<button class="btn btn-primary" id="but">Post</button>
+		<br>
+		<br>
+		<br>
+		<div id="results"></div>
+	</body>
+</html>
